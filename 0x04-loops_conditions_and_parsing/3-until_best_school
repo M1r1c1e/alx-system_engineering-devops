@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# using the until loop to print Best school 10 times 
+
+j=10
+
+until ((j  <= 0)); do
+	echo "Best School"
+
+	((j--))
+done
