@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# A script containing commands to automatically configure a redirect
+# on a new Ubuntu machine
+
+sudo apt-get -y update
+sudo apt-get install -y nginx
+
+# Configure Nginx to listen on port 80
+sudo ufw allow 'Nginx HTTP'
+
+# start Nginx
+sudo service nginx start
+
+# create a page with "Hello World!" message
+sudo su <<DELIMETER
+echo "Hello World!" > /var/www/html/index.html;
+DELIMETER
+
+# adding a redirection permanently
+new_string="server_name _;\n\trewrite ^\/redirect_me https:\/\/github.com\/mymiracle permanent;"
+sudo sed -i "s/server_name _;/$new_string/" /etc/nginx/sites-enabled/default
+
+sudo service nginx restart
