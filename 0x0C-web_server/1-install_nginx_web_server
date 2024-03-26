@@ -1,22 +1,23 @@
 #!/usr/bin/env bash
-# a script that configures nginx on a new Ubuntu machine
+# This script installs the Nginx web server and creates a "Hello
+# world" page.
 
-# Run script with sudo powers
-sudo su <<delimiter
+if [[ $EUID -ne 0 ]]; then
+  echo "ERROR: You need to be root to run this script" 1>&2
+  exit 1
+fi
 
-# carry a system update
-apt-get -y update
-
-# install nginx
+# Updating and install Nginx
+apt-get update
 apt-get install -y nginx
 
-# Configure Nginx to listen on port 80
-ufw allow 'Nginx HTTP'
-
-# Start Nginx
-service nginx start
-
-# Creating a page with "Hello World!" message
+# Create a page "Hello world" page
 echo "Hello World!" > /var/www/html/index.html
 
-delimiter
+# Start the Nginx service
+service nginx start
+
+if [[ ! $? ]]; then
+  echo "ERROR: Failed to start Nginx" 1>&2
+  exit 1
+fi
