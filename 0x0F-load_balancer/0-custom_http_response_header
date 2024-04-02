@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# a script Configure  a brand new Ubuntu machine to Nginx so that its HTTP response contains a custom header
+# The name of the custom HTTP header must be X-Served-By
+
+if [ "$EUID" -ne 0 ]; then
+  echo "You need to be root to run this script."
+  exit 1
+fi
+
+# package update 
+apt update
+
+# Install nginx
+apt install -y nginx
+
+# Create a custom HTTP header respnse
+echo "add_header X-Served-By $hostname;" > /etc/nginx/conf.d/custom_response_headers.conf
+
+# Restart nginx
+service nginx restart 
