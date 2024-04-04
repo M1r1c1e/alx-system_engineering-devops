@@ -5,17 +5,17 @@
 sudo apt-get update
 sudo apt-get install -y nginx
 
-# Creating Sample Page
-echo "Hello World!" > /var/www/html/index.html
+# Check if the string exists in the default Nginx configuration
+if ! grep -q "Ceci n'est pas une page" /var/www/html/404.html; then
+    # Create custom 404 page if it doesn't exist
+    echo "Ceci n'est pas une page" > /var/www/html/404.html
+fi
 
-# add the following configuration to the existing server block
-string_for_replacement="server_name _;\n\trewrite ^\/redirect_me https:\/\/www.github.com/mymiracle permanent;"
-sudo sed -i "s/server_name _;/$string_for_replacement/" /etc/nginx/sites-enabled/default
-
-# code for error page and redirect error 404
-echo "Ceci n'est pas une page" > /var/www/html/404.html
-string_for_replacement="listen 80 default_server;\n\terror_page 404 \/404.html;\n\tlocation = \/404.html {\n\t\troot \/var\/www\/html;\n\t\tinternal;\n\t}"
-sudo sed -i "s/listen 80 default_server;/$string_for_replacement/" /etc/nginx/sites-enabled/default
+# Check if the configurations already exist in the Nginx configuration file
+if ! grep -q "error_page 404 /404.html" /etc/nginx/sites-enabled/default; then
+    # Add configuration for custom 404 page
+    sudo sed -i '/listen 80 default_server;/a \\n\terror_page 404 /404.html;\n\tlocation = /404.html {\n\t\troot /var/www/html;\n\t\tinternal;\n\t}' /etc/nginx/sites-enabled/default
+fi
 
 # Restart Nginx
-service nginx restart
+sudo service nginx restart
