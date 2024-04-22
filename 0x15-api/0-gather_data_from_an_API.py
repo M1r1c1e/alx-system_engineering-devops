@@ -11,7 +11,6 @@ if __name__ == "__main__":
     for task in tasks:
         if task.get("completed") is True:
             com_tasks.append(task)
-
     titles = []
     for task in tasks:
         if task.get("completed") is True:
