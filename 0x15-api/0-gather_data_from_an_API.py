@@ -16,7 +16,9 @@ if __name__ == "__main__":
         if task.get("completed") is True:
             titles.append(task.get("title"))
     print("Employee {} is done with tasks({}/{}):"
-          .format(name.get("name"), len(com_tasks), len(tasks)))
+          .format(name.get("name"), len(c_tasks), len(tasks)))
     for title in titles:
         print("\t {}".format(title))
+
+
 
