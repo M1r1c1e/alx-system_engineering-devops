@@ -1,19 +1,28 @@
 #!/usr/bin/python3
-"""Querying the Reddit API and prints the titles of the 
-first 10 hot posts listed for a given subreddit
-"""
+"""Querying subreddit"""
+
 import requests
 
 
 def top_ten(subreddit):
-    url = "https://www.reddit.com/r/{}/hot.json?limit=10".format(subreddit)
-    header = {"User-Agent": "Mozilla/5.0"}
+    """Query Reddit and print titles of the first 10 hot posts"""
 
-    data = requests.get(url, headers=header, allow_redirects=False)
+    url = f"https://www.reddit.com/r/{subreddit}/hot.json"
 
-    if data.status_code == 200:
-        data = data.json().get("data").get("children")
-        for item in data:
-            print(item.get("data").get("title"))
-    else:
-        print(None)
+    # Set a custom User-Agent to avoid too many requests error
+    headers = {'User-Agent': 'My user Agent 1.0'}
+
+    # send a GET request to the Reddit API
+    response = requests.get(url, headers=headers, allow_redirects=False)
+
+    try:
+        response = requests.get(url, headers=headers,
+                                allow_redirects=False)
+        if response.status_code == 200:
+            children = response.json().get('data').get('children')
+            for i in range(10):
+                print(children[i].get('data').get('title'))
+        else:
+            print("None")
+    except Exception:
+        print("None")
